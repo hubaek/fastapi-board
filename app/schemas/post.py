@@ -1,5 +1,7 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Optional
+
 
 # 데이터 검증 스키마
 # Pydantic을 사용한 입력/출력 데이터 검증
@@ -15,9 +17,19 @@ class PostCreate(PostBase):
 class PostUpdate(PostBase):
     pass
 
-class PostOut(PostBase):
+class PostResponse(PostBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
+    view_count: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class PostListResponse(BaseModel):
+    posts: list[PostResponse]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
 
