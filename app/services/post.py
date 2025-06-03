@@ -1,12 +1,18 @@
+"""
+게시글 관련 비즈니스 로직을 처리하는 서비스 모듈
+"""
+import math
+from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.models.post import Post
 from app.schemas.post import PostCreate, PostUpdate
-from typing import Optional
-import math
 
 
 class PostService:
+    """
+    게시글 CRUD 작업과 비즈니스 로직을 처리하는 서비스 클래스
+    """
     def __init__(self, db: Session):
         self.db = db
 
@@ -41,9 +47,11 @@ class PostService:
         }
 
     def get_post(self, post_id: int):
+        """ID로 단일 게시글 조회"""
         return self.db.query(Post).filter(Post.id == post_id).first()
 
     def create_post(self, post: PostCreate):
+        """새 게시글 생성"""
         db_post = Post(
             title=post.title,
             content=post.content
@@ -54,6 +62,7 @@ class PostService:
         return db_post
 
     def update_post(self, post_id: int, post: PostUpdate):
+        """기존 게시글 업데이트"""
         db_post = self.get_post(post_id)
         if not db_post:
             return None
@@ -67,6 +76,7 @@ class PostService:
         return db_post
 
     def delete_post(self, post_id: int):
+        """게시글 삭제"""
         db_post = self.get_post(post_id)
         if not db_post:
             return False
@@ -76,6 +86,7 @@ class PostService:
         return True
 
     def increase_view_count(self, post_id: int):
+        """게시글 조회수 증가"""
         db_post = self.get_post(post_id)
         if db_post:
             db_post.view_count += 1
