@@ -34,7 +34,7 @@ async def read_post(
     return post
 
 @router.post("/", response_model=PostResponse)
-def create_post(
+async def create_post(
     post_data: PostCreate,
     service: PostService = Depends(get_post_service)
 ):
