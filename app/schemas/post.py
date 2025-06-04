@@ -1,6 +1,5 @@
 from datetime import datetime
 from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional
 
 
 # 데이터 검증 스키마
@@ -23,8 +22,7 @@ class PostResponse(PostBase):
     updated_at: datetime
     view_count: int
 
-    class Config:
-        ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)
 
 class PostListResponse(BaseModel):
     posts: list[PostResponse]

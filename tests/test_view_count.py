@@ -3,7 +3,6 @@ import concurrent.futures
 import time
 from app.services.post import PostService
 from app.schemas.post import PostCreate
-from app.db.database import SessionLocal
 
 def test_concurrent_view_count_simple(db):
     """기본 동시성 테스트 - 문제 확인용"""
@@ -143,7 +142,7 @@ def test_multiple_concurrent_runs(db):
         post_id = post.id
         db.commit()
 
-        def worker():
+        def worker(post_id=post_id):
             from tests.conftest import TestingSessionLocal
             thread_db = TestingSessionLocal()
             try:

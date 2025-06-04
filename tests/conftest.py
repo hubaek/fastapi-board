@@ -1,7 +1,7 @@
 import os
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 from app.db.database import Base
 from dotenv import load_dotenv
 
