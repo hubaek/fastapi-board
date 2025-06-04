@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
 
@@ -24,7 +24,7 @@ class PostResponse(PostBase):
     view_count: int
 
     class Config:
-        from_attributes = True
+        ConfigDict(from_attributes=True)
 
 class PostListResponse(BaseModel):
     posts: list[PostResponse]
