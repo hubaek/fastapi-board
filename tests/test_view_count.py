@@ -3,7 +3,6 @@ import concurrent.futures
 import time
 from app.services.post import PostService
 from app.schemas.post import PostCreate
-from app.db.database import SessionLocal
 
 def test_concurrent_view_count_simple(db):
     """기본 동시성 테스트 - 문제 확인용"""
@@ -16,7 +15,7 @@ def test_concurrent_view_count_simple(db):
     db.commit()  # 다른 세션에서도 볼 수 있도록 커밋
 
     # 동시 요청 수 (작게 시작)
-    num_requests = 20
+    num_requests = 500
 
     def increase_view_count_worker():
         # conftest.py의 engine 사용해서 새 세션 생성
@@ -24,8 +23,6 @@ def test_concurrent_view_count_simple(db):
         thread_db = TestingSessionLocal()
         try:
             thread_service = PostService(thread_db)
-            # race condition 발생 가능성을 높이기 위한 약간의 지연
-            time.sleep(0.1)
             thread_service.increase_view_count(post_id)
             thread_db.commit()
         except Exception as e:
@@ -143,7 +140,7 @@ def test_multiple_concurrent_runs(db):
         post_id = post.id
         db.commit()
 
-        def worker():
+        def worker(post_id=post_id):
             from tests.conftest import TestingSessionLocal
             thread_db = TestingSessionLocal()
             try:

@@ -66,7 +66,7 @@ async def increase_view_count(
     post_id: int,
     service: PostService = Depends(get_post_service)
 ):
-    post = service.increase_view_count(post_id)
+    post = service.atomic_increase_view_count(post_id)
     if not post:
         raise HTTPException(status_code=404, detail="게시글을 찾을 수 없습니다")
     return post
