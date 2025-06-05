@@ -93,3 +93,13 @@ class PostService:
             self.db.commit()
             self.db.refresh(db_post)
         return db_post
+
+    def atomic_increase_view_count(self, post_id: int):
+        updated_post = self.db.query(Post).filter(Post.id == post_id).update(
+            {Post.view_count: Post.view_count + 1}
+        )
+
+        if updated_post:
+            self.db.commit()
+            return self.get_post(post_id)
+        return None
